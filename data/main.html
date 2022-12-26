@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="style.css">
+
+<head>
+  <title>ESP credential portal</title>
+</head>
+
+<body>
+  <div class="main-block">
+    <form method="get" action="setting">
+      <div class="title">
+        <h2>ESP credential</h2>
+      </div>
+      <div class="info">
+        <input name='wifiname' maxlength=25 placeholder="wifi name">
+        <input name='pass' maxlength=25 placeholder="password">
+        <input name='serverIP' maxlength=15 placeholder="server IP">
+        <input name='location_name' maxlength=3 placeholder="room number">
+        <input name='destination_port' type="number" placeholder="destination port">
+        <input name='listening_port' type="number" placeholder="listening port">
+        <input name='sleep_timer' type="number" placeholder="sleep interval (minutes)">
+        <select name='installed_sensor'>
+          <option value="0" selected>no light sensor</option>
+          <option value="1">light sensor installed</option>
+        </select>
+      </div>
+      <input class="button" type="submit" href="/"></input>
+    </form>
+  </div>
+</body>
+
+</html>

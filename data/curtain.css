@@ -1,0 +1,46 @@
+html {
+    font-family: Arial;
+    display: inline-block;
+    text-align: center;
+}
+
+h2 {
+    font-size: 2.3rem;
+}
+
+p {
+    font-size: 1.9rem;
+}
+
+body {
+    max-width: 400px;
+    margin: 0px auto;
+    padding-bottom: 25px;
+}
+
+.slider {
+    -webkit-appearance: none;
+    margin: 14px;
+    width: 360px;
+    height: 25px;
+    background: #FFD65C;
+    outline: none;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 35px;
+    height: 35px;
+    background: #003249;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 35px;
+    height: 35px;
+    background: #003249;
+    cursor: pointer;
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <script src="funset.js"></script>
+  <link rel="stylesheet" href="curtain.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ESP Web Server</title>
+</head>
+
+<body onload="updatePageValue()">
+  <h2>ESP Web Server</h2>
+  <p><span id="textSliderValue">0</span></p>
+  <p><input type="range" onchange="updateSliderPWM(this)" id="pwmSlider" min="6" max="100" value=0 step="1"
+      class="slider"></p>
+  <div class="mode">
+    <h2>Mode</h2>
+    <h4 id="current_mode"> curtain mode: </h4>
+
+    <div> <button type="button" id="auto" onclick="autoMode()">Automatic</button> </div>
+    <div> <button type="button" id="manual" onclick="manualMode()">Manual</button> </div>
+  </div>
+
+</body>
+
+</html>
