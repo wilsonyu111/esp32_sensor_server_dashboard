@@ -46,22 +46,6 @@ void handleSubmitValue()
   char wifiPass [25] = "";
   wifi_server.arg("wifiname").toCharArray(wifiName, sizeof(wifiName));
   wifi_server.arg("pass").toCharArray(wifiPass, sizeof(wifiPass));
-  String serverIP = wifi_server.arg("serverIP");
-  String locationName = wifi_server.arg("location_name");
-  String destPort = wifi_server.arg("destination_port");
-  String listenPort = wifi_server.arg("listening_port");
-  String sleepTime = wifi_server.arg("sleep_timer");
-  String sensorPresent = wifi_server.arg("installed_sensor");
-
-  Serial.println(wifiName);
-  Serial.println(wifiPass);
-  Serial.println(serverIP);
-  Serial.println(locationName);
-  Serial.println(destPort);
-  Serial.println(listenPort);
-  Serial.println(sleepTime);
-  Serial.println(sensorPresent);
-  
 
   if (testWifi(wifiName, wifiPass))
   {
@@ -70,7 +54,12 @@ void handleSubmitValue()
     wifi_server.arg("location_name").toCharArray(esp_config.locationName, sizeof(esp_config.locationName));
     wifi_server.arg("serverIP").toCharArray(esp_config.serverIP, sizeof(esp_config.serverIP));
     esp_config.destPort = wifi_server.arg("destination_port").toInt();
-    esp_config.sleepTimer = wifi_server.arg("sleep_timer").toInt();
+
+    if (wifi_server.arg("sleep_timer").toInt() > 1)
+    {
+      esp_config.sleepTimer = wifi_server.arg("sleep_timer").toInt();
+    }
+    
     esp_config.installed_light = wifi_server.arg("installed_sensor").toInt();
     esp_config.modifiedTime = getTime();
     
@@ -78,9 +67,7 @@ void handleSubmitValue()
     byte temp = contain_data;
     putData (&temp, reset_data_index); // set the data index to contain data
     wifi_server.send(200, "text/plain", "credential recorded!!");
-    delay(200);
-    Serial.println("restarting esp");
-    ESP.restart(); // restart the esp to close all server and access point
+    espRestart();
   }
   else
   {

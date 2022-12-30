@@ -46,7 +46,7 @@ String getConfigJSON()
   jsonMessage += QUOTE_MARK + "sensor_IP" + QUOTE_MARK + COLON + QUOTE_MARK + WiFi.localIP().toString() + QUOTE_MARK + COMMA;
   jsonMessage += QUOTE_MARK + "server_ip" + QUOTE_MARK + COLON + QUOTE_MARK + esp_config.serverIP + QUOTE_MARK + COMMA;
   jsonMessage += QUOTE_MARK + "listen_port" + QUOTE_MARK + COLON + QUOTE_MARK + String(PORTAL_PORT) + QUOTE_MARK + COMMA;
-  jsonMessage += QUOTE_MARK + "config_timestamp" + QUOTE_MARK + COLON + QUOTE_MARK + String(esp_config.modifiedTime) + QUOTE_MARK + COMMA;
+  jsonMessage += QUOTE_MARK + "modified_time" + QUOTE_MARK + COLON + QUOTE_MARK + String(esp_config.modifiedTime) + QUOTE_MARK + COMMA;
   jsonMessage += QUOTE_MARK + "ssid" + QUOTE_MARK + COLON + QUOTE_MARK + esp_config.ssid + QUOTE_MARK + COMMA;
   jsonMessage += QUOTE_MARK + "installed_light" + QUOTE_MARK + COLON + QUOTE_MARK + String(esp_config.installed_light) + QUOTE_MARK + COMMA;  
   jsonMessage += QUOTE_MARK + "dest_port" + QUOTE_MARK + COLON + QUOTE_MARK + String(esp_config.destPort) + QUOTE_MARK + COMMA;
@@ -75,7 +75,7 @@ void modifyStat()
     Serial.println(portal_server.arg("destination_port"));
     esp_config.destPort = portal_server.arg("destination_port").toInt();
   }
-  if (portal_server.hasArg("sleep_timer"))
+  if (portal_server.hasArg("sleep_timer") && portal_server.arg("sleep_timer").toInt() >= 1)
   {
     Serial.println(portal_server.arg("sleep_timer"));
     esp_config.sleepTimer = portal_server.arg("sleep_timer").toInt();
@@ -95,13 +95,11 @@ void modifyStat()
   putData (&esp_config, config_index); // store data into eeprom
   
   portal_server.send(200, "text/plain", "got values");
+  espRestart(); // restart esp and update restart tarcking bit
 }
 
 void restartESP()
 {
   portal_server.send(200, "text/plain", "restarting");
-  delay(2000);
-  EEPROM.write(restart_bit_index, RESTART_VALUE);
-  EEPROM.commit();
-  ESP.restart();  
+  espRestart();// restart esp and update restart tarcking bit
 }

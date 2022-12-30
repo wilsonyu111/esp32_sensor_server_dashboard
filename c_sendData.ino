@@ -5,6 +5,7 @@ void sendPost ()
   String server_path = "http://" + String(esp_config.serverIP) + ":" + String(esp_config.destPort) + "/sendtoserver";
   Serial.println(server_path);
   HTTPClient http; // make http object
+  http.setTimeout(HTTP_TIMEOUT);
   http.begin(client, server_path); // connect to the server ip address
   http.addHeader("Content-Type", "application/json");
   String post_data = initialJSON();
@@ -30,7 +31,7 @@ String configJSON()
   jsonMessage += QUOTE_MARK + "sensor_id" + QUOTE_MARK + COLON + QUOTE_MARK + WiFi.macAddress() + QUOTE_MARK + COMMA;
   jsonMessage += QUOTE_MARK + "location_name" + QUOTE_MARK + COLON + QUOTE_MARK + esp_config.locationName + QUOTE_MARK + COMMA;
   jsonMessage += QUOTE_MARK + "sensor_ip" + QUOTE_MARK + COLON + QUOTE_MARK + WiFi.localIP().toString() + QUOTE_MARK + COMMA;
-  jsonMessage += QUOTE_MARK + "listen_port" + QUOTE_MARK + COLON + QUOTE_MARK + String(WIFI_PORT) + QUOTE_MARK;
+  jsonMessage += QUOTE_MARK + "listen_port" + QUOTE_MARK + COLON + QUOTE_MARK + String(PORTAL_PORT) + QUOTE_MARK;
   jsonMessage += CLOSE_BRACKET;
   return jsonMessage;
 }

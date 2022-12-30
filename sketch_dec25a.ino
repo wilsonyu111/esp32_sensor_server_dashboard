@@ -32,6 +32,8 @@
 #define LIGHT_INPUT_PIN         4
 #define WIFI_PORT               80
 #define PORTAL_PORT             3000
+#define HTTP_TIMEOUT            15000     // the library defaults to 5000
+#define DELAY_BEFORE_RESTART    3500      // wait for response to be sent before restarting
 
 const String OPEN_BRACKET = "{";
 const String CLOSE_BRACKET = "}";
@@ -47,7 +49,7 @@ struct startConfig{
   char serverIP[16] = "";
   bool installed_light = false;
   int destPort = -1;
-  int sleepTimer = 5;
+  int sleepTimer = 1;
   int modifiedTime = -1;
   
 };
@@ -102,13 +104,21 @@ void checkDoubleReset()
 
 void printDebug()
 {
+  Serial.print("ssid: ");
   Serial.println(esp_config.ssid);
+  Serial.print("password: ");
   Serial.println(esp_config.password);
+  Serial.print("location: ");
   Serial.println(esp_config.locationName);
+  Serial.print("server IP: ");
   Serial.println(esp_config.serverIP);
+  Serial.print("installed light?: ");
   Serial.println(esp_config.installed_light);
+  Serial.print("server port: ");
   Serial.println(esp_config.destPort);
+  Serial.print("sleep timer: ");
   Serial.println(esp_config.sleepTimer);
+  Serial.print("modified time: ");
   Serial.println(esp_config.modifiedTime);
 }
 
@@ -122,8 +132,8 @@ void setup() {
   if (EEPROM.read(reset_data_index) != contain_data || (resetWifi && EEPROM.read(restart_bit_index) == 0))
   {
     // start the web server and AP to get the credentials
-    setupAP();
-    launchWeb(); // launch async webserver
+    setupAP();   // launch AP for device to connect into
+    launchWeb(); // launch wifi portal webserver
     Serial.println("waiting for credentials");
     Serial.println("");
     while ((WiFi.status() != WL_CONNECTED) && APactive)
@@ -143,7 +153,7 @@ void setup() {
     EEPROM.commit();
   }
   initializeStartupConfig();
-  printDebug();
+//  printDebug();
   wifiConnect(esp_config.ssid, esp_config.password);
   launchDashboard();
   
